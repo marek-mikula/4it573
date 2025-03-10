@@ -26,7 +26,7 @@ readFile('instructions.txt', async (err, content) => {
     // take ony first row in the file
     const row = content.toString().split('\n')[0]
 
-    // validate input/output paths
+    // validate first row
     if (!/^[0-9]+$/.test(row)) {
         console.error('The contents of the instructions.txt file must be a single number.')
 
