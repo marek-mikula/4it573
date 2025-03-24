@@ -17,6 +17,10 @@
     <a href="/todos/<%= todo.id %>/toggle">nedokončeno</a>
     <% } %>
 </p>
+<form action="/todos/<%= todo.id %>" method="post">
+    <input name="title" type="text" value="<%= todo.title %>" required>
+    <button>Uložit</button>
+</form>
 <a href="/">Zpět na výpis</a>
 </body>
 </html>

@@ -77,6 +77,20 @@ app.get('/todos/:id', async (c) => {
     return c.html(rendered)
 })
 
+app.post('/todos/:id', async (c) => {
+  const id = Number(c.req.param('id'))
+
+  const todo = todos.find((todo) => todo.id === id)
+
+  if (!todo) return c.notFound()
+
+  const form = await c.req.formData()
+
+  todo.title = form.get('title') as string
+
+  return c.redirect(`/todos/${todo.id}`)
+})
+
 serve({
     fetch: app.fetch,
     port: 3000
