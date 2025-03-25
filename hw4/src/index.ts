@@ -48,7 +48,7 @@ app.get('/todos/:id/toggle', async (c) => {
 
     todo.done = !todo.done
 
-    if (/\/todos\/[0-9]+/.test(referer)) {
+    if (/\/todos\/[0-9]+$/.test(referer)) {
         return c.redirect(`/todos/${todo.id}`)
     }
 
