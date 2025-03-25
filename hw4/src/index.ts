@@ -40,12 +40,17 @@ app.post('/todos', async (c) => {
 
 app.get('/todos/:id/toggle', async (c) => {
     const id = Number(c.req.param('id'))
+    const referer = c.req.header('Referer') || '/'
 
     const todo = todos.find((todo) => todo.id === id)
 
     if (!todo) return c.notFound()
 
     todo.done = !todo.done
+
+    if (/\/todos\/[0-9]+/.test(referer)) {
+        return c.redirect(`/todos/${todo.id}`)
+    }
 
     return c.redirect('/')
 })
