@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <a href="/">Todočka</a>
+    <hr />
+    <h1><%= todo.title %></h1>
+    <% if (todo.priority === 'low') { %>
+    <span style="color: blue">Low</span>
+    <% } else if (todo.priority === 'normal') { %>
+    <span style="color: orange">Normal</span>
+    <% } else { %>
+    <span style="color: red">High</span>
+    <% } %>
+    <hr />
+    <% if (todo.done) { %>
+    <a href="/todos/<%= todo.id %>/toggle">dokončeno</a>
+    <a href="/todos/<%= todo.id %>/remove">odebrat</a>
+    <% } else { %>
+    <a href="/todos/<%= todo.id %>/toggle"> nedokončeno </a>
+    <% } %>
+    <hr />
+    <h2>Upravit todočko</h2>
+    <form action="/todos/<%= todo.id %>" method="post">
+      <label>Titulek</label>
+      <input name="title" value="<%= todo.title %>" required/>
+      <select name="priority" required>
+        <option value="low" <%= todo.priority === 'low' ? 'selected' : '' %>>Low</option>
+        <option value="normal" <%= todo.priority === 'normal' ? 'selected' : '' %>>Normal</option>
+        <option value="high" <%= todo.priority === 'high' ? 'selected' : '' %>>High</option>
+      </select>
+      <button type="submit">Uložit</button>
+    </form>
+  </body>
+</html>
