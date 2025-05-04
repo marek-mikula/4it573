@@ -1,0 +1,13 @@
+<ul data-testid="todos">
+  <% for (const todo of todos) { %>
+  <li>
+    <a href="/todos/<%= todo.id %>" data-testid="todo-title"><%= todo.title %></a>
+    - <% if (todo.done) { %>
+    <a href="/todos/<%= todo.id %>/toggle" data-testid="todo-state">dokončeno</a>
+    <a href="/todos/<%= todo.id %>/remove" data-testid="todo-remove">odebrat</a>
+    <% } else { %>
+    <a href="/todos/<%= todo.id %>/toggle" data-testid="todo-state">nedokončeno</a>
+    <% } %> - <span data-testid="todo-priority"><%= todo.priority %></span>
+  </li>
+  <% } %>
+</ul>

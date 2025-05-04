@@ -1,0 +1,10 @@
+<div data-testid="todo">
+  <h1><%= todo.title %></h1>
+  <hr />
+  <% if (todo.done) { %>
+  <a href="/todos/<%= todo.id %>/toggle" data-testid="todo-state">dokončeno</a>
+  <a href="/todos/<%= todo.id %>/remove" data-testid="todo-remove">odebrat</a>
+  <% } else { %>
+  <a href="/todos/<%= todo.id %>/toggle" data-testid="todo-state">nedokončeno</a>
+  <% } %>
+</div>
