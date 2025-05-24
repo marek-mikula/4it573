@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USER}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 0
+    ports:
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - auction-network
+
+  adonis:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT: '${PORT:-3000}'
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - auction-network
+
+networks:
+  auction-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
