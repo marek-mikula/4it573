@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "82b804b7-25b6-4d1d-83c4-e1397677217f",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16335177",
+		"_collection_link": "https://winter-crescent-205772.postman.co/workspace/auction~519f101d-59ad-4851-9fd2-d5d5b4bfa3b1/collection/16335177-82b804b7-25b6-4d1d-83c4-e1397677217f?action=share&source=collection_link&creator=16335177"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"Thomas\",\n    \"lastname\": \"Jefferson\",\n    \"email\": \"thomas.jefferson@example.com\",\n    \"password\": \"HelloWorld\",\n    \"passwordConfirm\": \"HelloWorld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/auth/register",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if response status is 200",
+							"if (pm.response.code === 200) {",
+							"    try {",
+							"        // Parse the response JSON",
+							"        const jsonData = pm.response.json();",
+							"        ",
+							"        // Extract the token from token.token path",
+							"        const extractedToken = jsonData?.token?.token;",
+							"        ",
+							"        if (extractedToken) {",
+							"            // Save the token as a collection variable",
+							"            pm.collectionVariables.set(\"TOKEN\", extractedToken);",
+							"            console.log(\"Token saved to collection variable: TOKEN\");",
+							"        } else {",
+							"            console.warn(\"Token not found in response body at path 'token.token'.\");",
+							"        }",
+							"    } catch (e) {",
+							"        console.error(\"Error parsing response JSON:\", e);",
+							"    }",
+							"} else {",
+							"    console.warn(\"Response status code is not 200, skipping token extraction.\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"thomas.jefferson@example.com\",\n    \"password\": \"HelloWorld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/auth/login",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Store an item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Starý počítač Macbook 2021, M4",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Docela v pohodě. Zatím funguje, jak má.",
+							"type": "text"
+						},
+						{
+							"key": "condition",
+							"value": "used",
+							"type": "text"
+						},
+						{
+							"key": "startPrice",
+							"value": "10000",
+							"type": "text"
+						},
+						{
+							"key": "tags[0]",
+							"value": "pc",
+							"type": "text"
+						},
+						{
+							"key": "tags[1]",
+							"value": "elektro",
+							"type": "text"
+						},
+						{
+							"key": "tags[2]",
+							"value": "apple",
+							"type": "text"
+						},
+						{
+							"key": "endAt",
+							"value": "2025-06-30 10:00:00",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/marekmikula/Downloads/logaster-2013-06-jpg.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/items",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update an item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Starý počítač Macbook 2021, M4",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Docela v pohodě. Zatím funguje, jak má. Trochu je poškrábaný teda.",
+							"type": "text"
+						},
+						{
+							"key": "tags[0]",
+							"value": "pc",
+							"type": "text"
+						},
+						{
+							"key": "tags[1]",
+							"value": "elektro",
+							"type": "text"
+						},
+						{
+							"key": "tags[2]",
+							"value": "apple",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/items/:id",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of user items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/items",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item detail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/items/:id",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of active items on the platform",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/items/active",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items",
+						"active"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place a bid on an item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bid\": 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/items/:id/bid",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"items",
+						":id",
+						"bid"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": ""
+		}
+	]
+}
