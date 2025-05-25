@@ -11,6 +11,7 @@ import router from '@adonisjs/core/services/router'
 import {middleware} from "#start/kernel";
 
 const AuthController = () => import('#controllers/auth_controller')
+const ItemsController = () => import('#controllers/items_controller')
 
 router
     .group(() => {
@@ -22,11 +23,13 @@ router
 
 router
 .group(() => {
-    router.get('/', () => {
-        return {
-            hello: 'World'
-        }
-    })
+    router
+        .group(() => {
+            router.post('/', [ItemsController, 'store']).as('store')
+            router.get('/', [ItemsController, 'index']).as('index')
+        })
+        .prefix('items')
+        .as('items')
 })
 .use(middleware.auth({
     guards: ['api']
