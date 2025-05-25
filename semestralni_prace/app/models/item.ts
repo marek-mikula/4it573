@@ -12,6 +12,8 @@ export enum ItemCondition {
 }
 
 export default class Item extends BaseModel {
+  serializeExtras = true
+
   @column({ isPrimary: true })
   declare id: number
 

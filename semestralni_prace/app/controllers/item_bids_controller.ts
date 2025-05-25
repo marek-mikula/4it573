@@ -38,7 +38,7 @@ export default class ItemBidsController {
         }
 
         if (lastBid && lastBid.bid >= payload.bid) {
-            return response.abort({message: 'Your bid is too low.'}, 400)
+            return response.abort({message: `Your bid is too low. You need to bid at least ${lastBid.bid + 1}`}, 400)
         }
 
         const newBid = await this.itemBidRepository.store({

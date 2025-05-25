@@ -42,6 +42,9 @@ export default class ItemRepository {
     async getListOfActiveItems(userId: number): Promise<Item[]> {
         return Item
             .query()
+            .withAggregate('bids', (query) => {
+                query.max('bid').as('maxBid')
+            })
             .where('user_id', '<>', userId)
             .where('end_at', '>', DateTime.local().toSQL())
             .where((query) => {

@@ -14,6 +14,7 @@ export default class ItemBidRepository {
         return ItemBid
             .query()
             .where('item_id', itemId)
+            .orderBy('id', 'desc')
             .first()
     }
 
