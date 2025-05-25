@@ -1,9 +1,12 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import {BaseModel, column, hasMany} from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import type {HasMany} from "@adonisjs/lucid/types/relations";
+import Item from "#models/item";
+import ItemBid from "#models/item_bid";
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -33,4 +36,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
+
+  @hasMany(() => Item, {
+    localKey: 'id',
+    foreignKey: 'userId'
+  })
+  declare posts: HasMany<typeof Item>
+
+  @hasMany(() => ItemBid, {
+    localKey: 'id',
+    foreignKey: 'userId'
+  })
+  declare bids: HasMany<typeof ItemBid>
 }

@@ -1,12 +1,20 @@
 import vine from '@vinejs/vine'
-import {ItemState} from "#models/item";
+import {ItemCondition} from "#models/item";
 
 export const storeValidator = vine.compile(
     vine.object({
         name: vine.string().trim().maxLength(255),
         description: vine.string().trim(),
-        state: vine.enum(ItemState),
+        condition: vine.enum(ItemCondition),
+        startPrice: vine.number().min(1),
         tags: vine.array(vine.string().minLength(1)),
-        startPrice: vine.number().min(1)
+        startAt: vine.date({formats: 'YYYY-MM-DD HH:mm:ss'}).afterOrEqual('today', {
+            compare: 'seconds'
+        }).nullable(),
+        endAt: vine.date({formats: 'YYYY-MM-DD HH:mm:ss'}).afterField('startAt', {
+            compare: 'day'
+        }).after('today', {
+            compare: 'day'
+        })
     })
 )
