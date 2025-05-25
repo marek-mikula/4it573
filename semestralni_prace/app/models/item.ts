@@ -39,9 +39,6 @@ export default class Item extends BaseModel {
   declare tags: string[]
 
   @column.dateTime()
-  declare startAt: DateTime | null
-
-  @column.dateTime()
   declare endAt: DateTime
 
   @column()
@@ -52,17 +49,6 @@ export default class Item extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @computed()
-  get isActive(): boolean {
-    const now = new Date()
-
-    if (this.startAt && this.startAt.toJSDate() > now) {
-      return false
-    }
-
-    return !this.isEnded;
-  }
 
   @computed()
   get isEnded(): boolean {

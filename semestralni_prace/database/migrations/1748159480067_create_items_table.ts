@@ -12,7 +12,6 @@ export default class extends BaseSchema {
       table.enum('condition', ['new', 'unpacked', 'used', 'broken']).notNullable()
       table.integer('start_price').unsigned().notNullable()
       table.json('tags')
-      table.timestamp('start_at')
       table.timestamp('end_at').notNullable()
       table.string('image_name').notNullable()
 

@@ -11,7 +11,6 @@ export default class ItemRepository {
         condition: ItemCondition
         startPrice: number
         tags: string[]
-        startAt: Date | null
         endAt: Date
         imageName: string
     }): Promise<Item> {
@@ -22,7 +21,6 @@ export default class ItemRepository {
             condition: data.condition,
             startPrice: data.startPrice,
             tags: data.tags,
-            startAt: data.startAt ? DateTime.fromJSDate(data.startAt) : null,
             endAt: DateTime.fromJSDate(data.endAt),
             imageName: data.imageName
         })
@@ -31,20 +29,12 @@ export default class ItemRepository {
     async update(item: Item, data: {
         name: string,
         description: string,
-        condition: ItemCondition
-        startPrice: number
         tags: string[]
-        startAt: Date | null
-        endAt: Date
         imageName: string | null
     }): Promise<Item> {
         item.name = data.name
         item.description = data.description
-        item.condition = data.condition
-        item.startPrice = data.startPrice
         item.tags = data.tags
-        item.startAt = data.startAt ? DateTime.fromJSDate(data.startAt) : null
-        item.endAt = DateTime.fromJSDate(data.endAt)
 
         if (data.imageName) {
             item.imageName = data.imageName
@@ -74,11 +64,6 @@ export default class ItemRepository {
             })
             .where('user_id', '<>', userId)
             .where('end_at', '>', DateTime.local().toSQL())
-            .where((query) => {
-                query
-                    .whereNull('start_at')
-                    .orWhere('start_at', '<', DateTime.local().toSQL())
-            })
     }
 
 }

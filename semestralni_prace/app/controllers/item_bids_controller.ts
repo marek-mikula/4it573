@@ -28,8 +28,8 @@ export default class ItemBidsController {
         }
 
         // user can bid only on active items
-        if (!item.isActive) {
-            return response.abort({message: item.isEnded ? 'Auction has already ended.' : 'Item not found.'}, 404)
+        if (item.isEnded) {
+            return response.abort({message: 'Auction has already ended.'}, 404)
         }
 
         const lastBid = await this.itemBidRepository.getLastBid(item.id)

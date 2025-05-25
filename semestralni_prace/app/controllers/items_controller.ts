@@ -28,7 +28,6 @@ export default class ItemsController {
             imageName: image.fileName!,
             userId: auth.user!.id,
             endAt: new Date(payload.endAt),
-            startAt: payload.startAt ? new Date(payload.startAt) : null,
         })
     }
 
@@ -41,17 +40,13 @@ export default class ItemsController {
         const item = await this.itemRepository.findItem(params.id)
 
         if (!item) {
-            return response.abort({
-                message: 'Item not found.'
-            }, 404)
+            return response.abort({message: 'Item not found.'}, 404)
         }
 
         // if user is not the owner of the item,
         // he can see it only in case it's active
-        if (item.userId !== user.id && !item.isActive) {
-            return response.abort({
-                message: item.isEnded ? 'Auction has already ended.' : 'Item not found.'
-            }, 404)
+        if (item.userId !== user.id && item.isEnded) {
+            return response.abort({message: 'Auction has already ended.'}, 404)
         }
 
         return item
@@ -62,15 +57,7 @@ export default class ItemsController {
         const item = await this.itemRepository.findItem(params.id)
 
         if (!item || item.userId !== user.id) {
-            return response.abort({
-                message: 'Item not found.'
-            }, 404)
-        }
-
-        if (item.isActive) {
-            return response.abort({
-                message: 'Auction has already started.'
-            }, 400)
+            return response.abort({message: 'Item not found.'}, 404)
         }
 
         const payload = await updateValidator.validate(request.all())
@@ -94,8 +81,6 @@ export default class ItemsController {
         return await this.itemRepository.update(item, {
             ...payload,
             imageName,
-            endAt: new Date(payload.endAt),
-            startAt: payload.startAt ? new Date(payload.startAt) : null,
         })
     }
 
