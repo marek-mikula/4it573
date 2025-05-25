@@ -1,5 +1,5 @@
 import type {HttpContext} from '@adonisjs/core/http'
-import {storeValidator} from "#validators/item";
+import {storeValidator, updateValidator} from "#validators/item";
 import ItemRepository from "#repositories/item_repository";
 import {inject} from "@adonisjs/core";
 
@@ -45,6 +45,31 @@ export default class ItemsController {
         }
 
         return item
+    }
+
+    async update({response, request, params, auth}: HttpContext) {
+        const user = auth.user!
+        const item = await this.itemRepository.findItem(params.id)
+
+        if (!item || item.userId !== user.id) {
+            return response.abort({
+                message: 'Item not found.'
+            }, 404)
+        }
+
+        if (item.isActive) {
+            return response.abort({
+                message: 'Auction has already started.'
+            }, 400)
+        }
+
+        const payload = await updateValidator.validate(request.all())
+
+        return await this.itemRepository.update(item, {
+            ...payload,
+            endAt: new Date(payload.endAt),
+            startAt: payload.startAt ? new Date(payload.startAt) : null,
+        })
     }
 
     async active({auth}: HttpContext) {

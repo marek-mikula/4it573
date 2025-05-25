@@ -26,6 +26,26 @@ export default class ItemRepository {
         })
     }
 
+    async update(item: Item, data: {
+        name: string,
+        description: string,
+        condition: ItemCondition
+        startPrice: number
+        tags: string[]
+        startAt: Date | null
+        endAt: Date
+    }): Promise<Item> {
+        item.name = data.name
+        item.description = data.description
+        item.condition = data.condition
+        item.startPrice = data.startPrice
+        item.tags = data.tags
+        item.startAt = data.startAt ? DateTime.fromJSDate(data.startAt) : null
+        item.endAt = DateTime.fromJSDate(data.endAt)
+
+        return item.save()
+    }
+
     async getListOfUserItems(userId: number): Promise<Item[]> {
         return Item
             .query()

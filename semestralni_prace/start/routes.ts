@@ -32,6 +32,10 @@ router
                 match: /^[0-9]+$/,
                 cast: (value) => Number(value),
             })
+            router.patch('/:id', [ItemsController, 'update']).as('update').where('id', {
+                match: /^[0-9]+$/,
+                cast: (value) => Number(value),
+            })
             router.get('/active', [ItemsController, 'active']).as('active')
             router.post('/:id/bid', [ItemBidsController, 'store']).as('bid').where('id', {
                 match: /^[0-9]+$/,
