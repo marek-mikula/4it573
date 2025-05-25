@@ -13,6 +13,7 @@ export default class ItemRepository {
         tags: string[]
         startAt: Date | null
         endAt: Date
+        imageName: string
     }): Promise<Item> {
         return Item.create({
             userId: data.userId,
@@ -22,7 +23,8 @@ export default class ItemRepository {
             startPrice: data.startPrice,
             tags: data.tags,
             startAt: data.startAt ? DateTime.fromJSDate(data.startAt) : null,
-            endAt: DateTime.fromJSDate(data.endAt)
+            endAt: DateTime.fromJSDate(data.endAt),
+            imageName: data.imageName
         })
     }
 
@@ -34,6 +36,7 @@ export default class ItemRepository {
         tags: string[]
         startAt: Date | null
         endAt: Date
+        imageName: string | null
     }): Promise<Item> {
         item.name = data.name
         item.description = data.description
@@ -42,6 +45,10 @@ export default class ItemRepository {
         item.tags = data.tags
         item.startAt = data.startAt ? DateTime.fromJSDate(data.startAt) : null
         item.endAt = DateTime.fromJSDate(data.endAt)
+
+        if (data.imageName) {
+            item.imageName = data.imageName
+        }
 
         return item.save()
     }

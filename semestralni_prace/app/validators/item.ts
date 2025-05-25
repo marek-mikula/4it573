@@ -15,6 +15,10 @@ export const storeValidator = vine.compile(
             compare: 'day'
         }).after('today', {
             compare: 'day'
+        }),
+        image: vine.file({
+            size: '5mb',
+            extnames: ['jpg', 'png']
         })
     })
 )
@@ -33,6 +37,10 @@ export const updateValidator = vine.compile(
             compare: 'day'
         }).after('today', {
             compare: 'day'
-        })
+        }),
+        image: vine.file({
+            size: '5mb',
+            extnames: ['jpg', 'png']
+        }).optional()
     })
 )

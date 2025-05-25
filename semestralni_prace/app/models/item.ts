@@ -3,6 +3,7 @@ import {BaseModel, belongsTo, column, computed, hasMany} from '@adonisjs/lucid/o
 import User from "#models/user";
 import type {BelongsTo, HasMany} from "@adonisjs/lucid/types/relations";
 import ItemBid from "#models/item_bid";
+import router from '@adonisjs/core/services/router'
 
 export enum ItemCondition {
   NEW = 'new',
@@ -43,6 +44,9 @@ export default class Item extends BaseModel {
   @column.dateTime()
   declare endAt: DateTime
 
+  @column()
+  declare imageName: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -63,6 +67,14 @@ export default class Item extends BaseModel {
   @computed()
   get isEnded(): boolean {
     return this.endAt.toJSDate() < (new Date());
+  }
+
+  @computed()
+  get fileUrl(): string {
+    return router
+        .builder()
+        .params([this.imageName])
+        .make('files.show')
   }
 
   @belongsTo(() => User, {

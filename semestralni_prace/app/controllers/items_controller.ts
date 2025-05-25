@@ -2,6 +2,9 @@ import type {HttpContext} from '@adonisjs/core/http'
 import {storeValidator, updateValidator} from "#validators/item";
 import ItemRepository from "#repositories/item_repository";
 import {inject} from "@adonisjs/core";
+import { cuid } from '@adonisjs/core/helpers'
+import app from '@adonisjs/core/services/app'
+import * as fs from "fs";
 
 @inject()
 export default class ItemsController {
@@ -14,8 +17,15 @@ export default class ItemsController {
     async store({request, auth}: HttpContext) {
         const payload = await storeValidator.validate(request.all())
 
+        const image = request.file('image')!
+
+        await image.move(app.makePath('uploads'), {
+            name: `${cuid()}.${image.extname}`
+        })
+
         return await this.itemRepository.store({
             ...payload,
+            imageName: image.fileName!,
             userId: auth.user!.id,
             endAt: new Date(payload.endAt),
             startAt: payload.startAt ? new Date(payload.startAt) : null,
@@ -64,9 +74,26 @@ export default class ItemsController {
         }
 
         const payload = await updateValidator.validate(request.all())
+        const image = request.file('image')
+        let imageName = null
+
+        // user wants to change the image
+        if (image) {
+            const existingPath = app.makePath('uploads', item.imageName)
+
+            // remove existing file
+            await fs.unlinkSync(existingPath)
+
+            await image.move(app.makePath('uploads'), {
+                name: `${cuid()}.${image.extname}`
+            })
+
+            imageName = image.fileName!
+        }
 
         return await this.itemRepository.update(item, {
             ...payload,
+            imageName,
             endAt: new Date(payload.endAt),
             startAt: payload.startAt ? new Date(payload.startAt) : null,
         })

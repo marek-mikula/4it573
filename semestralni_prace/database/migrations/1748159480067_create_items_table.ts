@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.json('tags')
       table.timestamp('start_at')
       table.timestamp('end_at').notNullable()
+      table.string('image_name').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
